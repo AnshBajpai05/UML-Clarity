@@ -687,11 +687,10 @@ const Dashboard = () => {
             };
 
             const actors = (data.actors || []).map((a, i) => {
-                const label = a.trim();
-                const safeId = label.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
-                const isSystem = label.toLowerCase().includes('system');
+                const label = a.split(' ')[0];
+                const isSystem = label.toLowerCase() === 'system';
                 return {
-                    id: `actor-${safeId}-${runId}`,
+                    id: `actor-${label}-${runId}`, // Predictable ID based on label
                     label: label,
                     fullDescription: `Role: ${a}`,
                     category: isSystem ? 'system' : 'actor',
@@ -700,20 +699,15 @@ const Dashboard = () => {
             });
 
             const useCases = (data.use_cases || []).map((uc, i) => {
-                // Priority 1: Use category provided by AI
-                // Priority 2: Use mapping based on diagram type
-                let category = uc.category || 'use_case';
-                if (!uc.category) {
-                    if (diagType === 'activity') category = 'action';
-                    else if (diagType === 'dfd') category = 'process';
-                }
-
+                let category = 'use_case';
+                if (diagType === 'activity') category = 'action';
+                else if (diagType === 'dfd') category = 'process';
                 return {
-                    id: uc.id || `uc-${i}-${runId}`,
+                    id: uc.id || `uc-${i}-${runId}`, // Use backend ID if available
                     label: uc.label,
                     fullDescription: uc.full_description || uc.label,
                     category,
-                    jointType: uc.jointType || JOINT_TYPE_MAP[category] || 'uml.UseCase',
+                    jointType: JOINT_TYPE_MAP[category] || 'uml.UseCase',
                 };
             });
             return [...actors, ...useCases];

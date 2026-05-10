@@ -19,7 +19,6 @@ class UMLUseCase(BaseModel):
     label: str = Field(description="High-level, semantic user goal (e.g., 'Manage Employees', 'Apply Leave')")
     actor: str = Field(description="The human actor who initiates this use case")
     full_description: str = Field(description="Brief description of what this use case encompasses")
-    category: str = Field(default="use_case", description="Categorization: 'use_case', 'actor', 'process', 'data_store', 'external', 'decision', 'start', 'end'")
 
 class UMLModel(BaseModel):
     actors: List[str] = Field(description="List of standardized actors (e.g., 'Admin', 'Employee', 'HR Manager')")
@@ -80,11 +79,6 @@ You MUST output strictly in the following JSON format. Do not deviate from these
     }
   ]
 }
-
-SPECIFIC RULES FOR DIAGRAM TYPES:
-- ACTIVITY DIAGRAMS: You MUST include exactly one node with category 'start' and one with 'end'. Use 'decision' for branching logic. Use 'action' for steps.
-- DFD: Use 'process' for functional steps, 'data_store' for databases/storage, and 'external' for entities outside the system.
-- USE CASE: Use 'actor' and 'use_case'.
     """
 
     try:
